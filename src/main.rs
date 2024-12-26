@@ -115,7 +115,6 @@ fn main() -> std::io::Result<()> {
     execute!(stdout, cursor::Show, terminal::LeaveAlternateScreen)?;
     terminal::disable_raw_mode()?;
     println!("Game Over! Final Score: {}", score);
-    print!("{:?}", obstacles);
-
+    
     Ok(())
 }
