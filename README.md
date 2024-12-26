@@ -1,6 +1,6 @@
 # Jumpie
 
-Welcome to **Jumpie**, a simple and fun terminal-based jumping game inspired by the Chrome offline dinosaur game!
+Welcome to **Jumpie**, a simple and fun terminal-based jumping game inspired by the Chrome dinosaur game!
 
 ## Features
 
