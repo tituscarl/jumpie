@@ -14,7 +14,7 @@ To install and run Jumpie, follow these steps:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/jumpie.git
+    git clone https://github.com/tituscarl/jumpie.git
     ```
 2. Navigate to the project directory:
     ```sh
@@ -31,22 +31,14 @@ To install and run Jumpie, follow these steps:
 
 ## How to Play
 
-- Press the **enter** to make Jumpie jump.
+- Press **enter** key to make Jumpie jump.
 - Avoid obstacles by timing your jumps perfectly.
 - The game gets faster as you progress, so stay sharp!
 - Press **q** to quit the game at any time.
 
 ## Contributing
 
-We welcome contributions! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
+If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-- Inspired by the Chrome offline dinosaur game.
-- Thanks to all contributors and users for their support.
 
 Enjoy the game and happy jumping!
