@@ -102,10 +102,6 @@ fn main() -> std::io::Result<()> {
             print!("#");
         }
 
-        // Draw score
-        execute!(stdout, cursor::MoveTo(0, 0))?;
-        print!("Scoreee: {}", score);
-
         stdout.flush()?;
         sleep(Duration::from_millis(speed));
     }
@@ -121,8 +117,8 @@ fn speed_up(speed: u64, score: i32) -> u64 {
     match score {
         score if score > 2 => (speed - 5).max(10),
         score if score > 5 => (speed - 7).max(5),
-        score if score > 11 => (speed - 10).max(1),
-        score if score > 15 => (speed - 10).max(1),
+        score if score > 11 => (speed - 8).max(1),
+        score if score > 15 => (speed - 8).max(1),
         _ => speed,
     }
 }
