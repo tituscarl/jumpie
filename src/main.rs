@@ -2,6 +2,7 @@ use crossterm::{
     cursor,
     event::{self, Event, KeyCode},
     execute,
+    style::Print,
     terminal::{self, ClearType},
 };
 use rand::Rng;
@@ -17,18 +18,32 @@ fn main() -> std::io::Result<()> {
     let mut score = 0;
     let mut jumping = false;
     let mut velocity = 0;
-    let mut speed = 50; // Initial speed in ms
+    let mut speed: u64 = 50; // Initial speed in ms
     let mut rng = rand::thread_rng();
 
+    let mut running = true;
     terminal::enable_raw_mode()?;
     execute!(stdout, terminal::EnterAlternateScreen, cursor::Hide)?;
 
     loop {
+        // Draw score
+        execute!(stdout, cursor::MoveTo(0, 0))?;
+        print!("Scoreee: {}", score);
+
+        execute!(
+            stdout,
+            cursor::MoveTo((screen_width / 2) - 15, 5),
+            Print("Press 'p' to pause, 'q' to quit")
+        )?;
+
+        stdout.flush()?;
         // Handle input
         if event::poll(Duration::from_millis(1))? {
             if let Event::Key(key) = event::read()? {
                 if key.code == KeyCode::Char('q') {
                     break;
+                } else if key.code == KeyCode::Char('p') {
+                    running = !running;
                 } else if key.code == KeyCode::Enter && !jumping {
                     jumping = true;
                     velocity = -3;
@@ -51,25 +66,7 @@ fn main() -> std::io::Result<()> {
         if obstacles[0] == 0 {
             obstacles.remove(0);
             score += 1;
-            if score == 2 {
-                speed = (speed - 5).max(10); // Ensure speed does not go below 10 milliseconds
-            }
-
-            if score == 5 {
-                speed = (speed - 7).max(5); // Ensure speed does not go below 5 milliseconds
-            }
-
-            if score == 11 {
-                speed = (speed - 10).max(1); // Ensure speed does not go below 1 milliseconds
-            }
-
-            if score == 15 {
-                speed = (speed - 15).max(1); // Ensure speed does not go below 1 milliseconds
-            }
-
-            if score > 20 {
-                speed = (speed - 20).max(1); // Ensure speed does not go below 1 milliseconds
-            }
+            speed = speed_up(speed, score);
         }
 
         if obstacles.last() == Some(&5) {
@@ -82,15 +79,17 @@ fn main() -> std::io::Result<()> {
         }
 
         // Collision detection
-        if obstacles.contains(&1) && player_pos == screen_height {
+        if obstacles.contains(&1)
+            && (player_pos == screen_height || player_pos == screen_height - 1)
+        {
             break;
         }
 
         // Draw frame
         execute!(
             stdout,
-            cursor::MoveTo(0, 0),
-            terminal::Clear(ClearType::All)
+            cursor::MoveTo(0, screen_height / 2),
+            terminal::Clear(ClearType::FromCursorDown)
         )?;
 
         // Draw player
@@ -117,4 +116,13 @@ fn main() -> std::io::Result<()> {
     println!("Game Over! Final Score: {}", score);
     
     Ok(())
+}
+fn speed_up(speed: u64, score: i32) -> u64 {
+    match score {
+        score if score > 2 => (speed - 5).max(10),
+        score if score > 5 => (speed - 7).max(5),
+        score if score > 11 => (speed - 10).max(1),
+        score if score > 15 => (speed - 10).max(1),
+        _ => speed,
+    }
 }
