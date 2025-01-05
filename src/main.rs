@@ -28,7 +28,7 @@ fn main() -> std::io::Result<()> {
     loop {
         // Draw score
         execute!(stdout, cursor::MoveTo(0, 0))?;
-        print!("Scoreee: {}", score);
+        print!("Score: {}", score);
 
         execute!(
             stdout,
