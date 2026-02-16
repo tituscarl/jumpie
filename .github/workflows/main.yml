@@ -26,10 +26,10 @@ jobs:
     - name: 'Release from tags'
       if: startsWith(github.event.ref, 'refs/tags/v')
       env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        GH_TOKEN: ${{ github.token }}
       run: |
         rustup target add x86_64-unknown-linux-gnu
         cargo build --release --target=x86_64-unknown-linux-gnu
         cp -v target/x86_64-unknown-linux-gnu/release/jumpie ./jumpie
         tar czvf jumpie-${GITHUB_REF_NAME}-x86_64-linux.tar.gz jumpie
-        gh release create ${GITHUB_REF_NAME} ./*.tar.gz --generate-notes
+        gh release create ${GITHUB_REF_NAME} ./*.tar.gz --generate-note
