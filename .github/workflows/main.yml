@@ -22,14 +22,53 @@ jobs:
       if: ${{ ! startsWith(github.event.ref, 'refs/tags/v') }}
       run: |
         cargo build
- 
-    - name: 'Release from tags'
-      if: startsWith(github.event.ref, 'refs/tags/v')
-      env:
-        GH_TOKEN: ${{ github.token }}
+
+  release:
+    name: Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: x86_64-apple-darwin,aarch64-apple-darwin,x86_64-unknown-linux-gnu
+
+    - name: Install Linux cross-compiler
       run: |
-        rustup target add x86_64-unknown-linux-gnu
+        brew tap messense/macos-cross-toolchains
+        brew install x86_64-unknown-linux-gnu
+
+    - name: Build macOS ARM64
+      run: |
+        cargo build --release --target=aarch64-apple-darwin
+        mkdir -p dist/jumpie-darwin-arm64
+        cp target/aarch64-apple-darwin/release/jumpie dist/jumpie-darwin-arm64/jumpie
+
+    - name: Build macOS x86_64
+      run: |
+        cargo build --release --target=x86_64-apple-darwin
+        mkdir -p dist/jumpie-darwin-amd64
+        cp target/x86_64-apple-darwin/release/jumpie dist/jumpie-darwin-amd64/jumpie
+
+    - name: Build Linux x86_64
+      env:
+        CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER: x86_64-unknown-linux-gnu-gcc
+        CC_x86_64_unknown_linux_gnu: x86_64-unknown-linux-gnu-gcc
+      run: |
         cargo build --release --target=x86_64-unknown-linux-gnu
-        cp -v target/x86_64-unknown-linux-gnu/release/jumpie ./jumpie
-        tar czvf jumpie-${GITHUB_REF_NAME}-x86_64-linux.tar.gz jumpie
-        gh release create ${GITHUB_REF_NAME} ./*.tar.gz --generate-note
+        mkdir -p dist/jumpie-linux-amd64
+        cp target/x86_64-unknown-linux-gnu/release/jumpie dist/jumpie-linux-amd64/jumpie
+
+    - name: Run GoReleaser
+      uses: goreleaser/goreleaser-action@v6
+      with:
+        version: '~> v2'
+        args: release --clean
+      env:
+        GITHUB_TOKEN: ${{ github.token }}

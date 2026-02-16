@@ -1,15 +1,34 @@
 version: 2
 builds:
-- id: "jumpie"
+- id: jumpie-linux-amd64
   binary: jumpie
+  builder: prebuilt
   goos:
   - linux
+  goarch:
+  - amd64
+  prebuilt:
+    path: dist/jumpie-linux-amd64/jumpie
+- id: jumpie-darwin-amd64
+  binary: jumpie
+  builder: prebuilt
+  goos:
   - darwin
   goarch:
   - amd64
+  prebuilt:
+    path: dist/jumpie-darwin-amd64/jumpie
+- id: jumpie-darwin-arm64
+  binary: jumpie
+  builder: prebuilt
+  goos:
+  - darwin
+  goarch:
+  - arm64
+  prebuilt:
+    path: dist/jumpie-darwin-arm64/jumpie
 checksum:
   name_template: 'checksums.txt'
-dist: /tmp/jumpie/dist
 changelog:
   sort: asc
   filters:
@@ -31,4 +50,4 @@ brews:
   install: |
     bin.install "jumpie"
   test: |
-    assert_match /Usage: jumpie/, shell_output("#{bin}/jumpie -h", 0)
+    assert_match "jumpie", shell_output("#{bin}/jumpie --version", 0)
