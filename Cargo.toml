@@ -2,6 +2,13 @@
 name = "jumpie"
 version = "0.1.0"
 edition = "2021"
+description = "A fun terminal-based jumping game inspired by the Chrome dinosaur game"
+license = "MIT"
+repository = "https://github.com/tituscarl/jumpie"
+homepage = "https://github.com/tituscarl/jumpie"
+readme = "README.md"
+keywords = ["game", "terminal", "cli", "crossterm"]
+categories = ["games"]
 
 [dependencies]
 crossterm = "0.28.1"

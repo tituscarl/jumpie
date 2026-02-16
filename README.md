@@ -10,7 +10,14 @@ Welcome to **Jumpie**, a simple and fun terminal-based jumping game inspired by 
 
 ## Installation
 
-To install and run Jumpie, follow these steps:
+### Homebrew (macOS & Linux)
+
+```sh
+brew tap tituscarl/tap
+brew install jumpie
+```
+
+### From source
 
 1. Clone the repository:
     ```sh
@@ -20,7 +27,7 @@ To install and run Jumpie, follow these steps:
     ```sh
     cd jumpie
     ```
-3. Build the game:
+3. Build and install:
     ```sh
     cargo build --release
     ```
@@ -31,10 +38,11 @@ To install and run Jumpie, follow these steps:
 
 ## How to Play
 
-- Press **enter** key to make Jumpie jump.
+- Press **Space**, **Enter**, or **↑** to jump.
 - Avoid obstacles by timing your jumps perfectly.
 - The game gets faster as you progress, so stay sharp!
-- Press **q** to quit the game at any time.
+- Press **P** to pause the game.
+- Press **Q** to quit the game at any time.
 
 ## Contributing
 

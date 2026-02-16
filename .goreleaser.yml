@@ -1,0 +1,34 @@
+version: 2
+builds:
+- id: "jumpie"
+  binary: jumpie
+  goos:
+  - linux
+  - darwin
+  goarch:
+  - amd64
+checksum:
+  name_template: 'checksums.txt'
+dist: /tmp/jumpie/dist
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+release:
+  github:
+    owner: tituscarl
+    name: jumpie
+brews:
+- repository:
+    owner: tituscarl
+    name: homebrew-tap
+  name: jumpie
+  homepage: "https://github.com/tituscarl/jumpie"
+  description: "A fun terminal-based jumping game inspired by the Chrome dinosaur game"
+  directory: Formula
+  install: |
+    bin.install "jumpie"
+  test: |
+    assert_match /Usage: jumpie/, shell_output("#{bin}/jumpie -h", 0)

@@ -267,6 +267,13 @@ fn check_collision(obstacles: &[Obstacle], ground_y: u16, player_y: f64, player_
 
 // ── Main ───────────────────────────────────────────────────────────────
 fn main() -> std::io::Result<()> {
+    // Handle --version flag for Homebrew formula test
+    let args: Vec<String> = std::env::args().collect();
+    if args.iter().any(|a| a == "--version" || a == "-V") {
+        println!("jumpie {}", env!("CARGO_PKG_VERSION"));
+        return Ok(());
+    }
+
     let mut stdout = stdout();
     terminal::enable_raw_mode()?;
     execute!(stdout, terminal::EnterAlternateScreen, cursor::Hide)?;
